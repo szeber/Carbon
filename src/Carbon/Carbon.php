@@ -3165,6 +3165,19 @@ class Carbon extends DateTime
     }
 
     /**
+     * Get the difference in minutes using timestamps.
+     *
+     * @param \Carbon\Carbon|\DateTimeInterface|string|null $date
+     * @param bool                                          $absolute Get the absolute of the difference
+     *
+     * @return int
+     */
+    public function diffInRealMinutes($date = null, $absolute = true)
+    {
+        return (int) ($this->diffInRealSeconds($date, $absolute) / static::SECONDS_PER_MINUTE);
+    }
+
+    /**
      * Get the difference in seconds
      *
      * @param \Carbon\Carbon|null $date
@@ -3181,6 +3194,22 @@ class Carbon extends DateTime
             $diff->s;
 
         return $absolute || !$diff->invert ? $value : -$value;
+    }
+
+    /**
+     * Get the difference in seconds using timestamps.
+     *
+     * @param \Carbon\Carbon|\DateTimeInterface|string|null $date
+     * @param bool                                          $absolute Get the absolute of the difference
+     *
+     * @return int
+     */
+    public function diffInRealSeconds($date = null, $absolute = true)
+    {
+        $date = $this->resolveCarbon($date);
+        $value = $date->getTimestamp() - $this->getTimestamp();
+
+        return $absolute ? abs($value) : $value;
     }
 
     /**
